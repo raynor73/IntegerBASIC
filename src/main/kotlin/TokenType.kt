@@ -12,7 +12,13 @@ enum class TokenType {
     STRING_IDENTIFIER, IDENTIFIER, STRING, NUMBER,
 
     // Keywords.
-    PRINT,
+    AND, OR, MOD, NOT,
+
+    // Statements
+    LET, INPUT, PRINT, TAB, FOR, TO, STEP, NEXT, IF, THEN, GOTO, GOSUB, DIM, REM, END, POKE, CALL,
+
+    // Built-in functions.
+    ABS, SGN, PEEK, RND, LEN,
 
     EOF
 }

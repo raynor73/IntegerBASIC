@@ -71,7 +71,7 @@ class Scanner(private val source: String) {
             }
             else -> {
                 if (!isAlpha(c)) {
-                    error(line, "Unexpected character in identifier.")
+                    addToken(TokenType.IDENTIFIER)
                 } else {
                     while (isAlpha(peek())) {
                         advance()
@@ -162,7 +162,34 @@ class Scanner(private val source: String) {
     companion object {
 
         private val KEYWORDS = mapOf(
-            "PRINT" to TokenType.PRINT
+                "AND" to TokenType.AND,
+                "OR" to TokenType.OR,
+                "MOD" to TokenType.MOD,
+                "NOT" to TokenType.NOT,
+
+                "LET" to TokenType.LET,
+                "INPUT" to TokenType.INPUT,
+                "PRINT" to TokenType.PRINT,
+                "TAB" to TokenType.TAB,
+                "FOR" to TokenType.FOR,
+                "TO" to TokenType.TO,
+                "STEP" to TokenType.STEP,
+                "NEXT" to TokenType.NEXT,
+                "IF" to TokenType.IF,
+                "THEN" to TokenType.THEN,
+                "GOTO" to TokenType.GOTO,
+                "GOSUB" to TokenType.GOSUB,
+                "DIM" to TokenType.DIM,
+                "REM" to TokenType.REM,
+                "END" to TokenType.END,
+                "POKE" to TokenType.POKE,
+                "CALL" to TokenType.CALL,
+
+                "ABS" to TokenType.ABS,
+                "SGN" to TokenType.SGN,
+                "PEEK" to TokenType.PEEK,
+                "RND" to TokenType.RND,
+                "LEN" to TokenType.LEN
         )
     }
 }
