@@ -83,6 +83,11 @@ class Scanner(private val source: String) {
                         error(line, "Unexpected keyword")
                     } else {
                         addToken(type)
+                        if (type == TokenType.REM) {
+                            while (peek() != '\n' && !isAtEnd()) {
+                                advance()
+                            }
+                        }
                     }
                 }
             }
