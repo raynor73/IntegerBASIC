@@ -7,12 +7,19 @@ import kotlin.system.exitProcess
 object IntegerBASIC {
 
     private var hadError = false
+    private var hadRuntimeError = false
+
+    private val interpreter = Interpreter()
 
     fun runFile(path: String) {
         run(File(path).readText())
 
         if (hadError) {
             exitProcess(65)
+        }
+
+        if (hadRuntimeError) {
+            exitProcess(70)
         }
     }
 
@@ -37,6 +44,11 @@ object IntegerBASIC {
         }
     }
 
+    fun runtimeError(error: RuntimeError) {
+        System.err.println("${error.message}\n[line ${error.token.line}]")
+        hadRuntimeError = true
+    }
+
     private fun run(source: String) {
         val scanner = Scanner(source)
         val tokens = scanner.scanTokens()
@@ -47,7 +59,9 @@ object IntegerBASIC {
             return
         }
 
-        println(AstPrinter().print(expression))
+        interpreter.interpret(expression)
+
+        //println(AstPrinter().print(expression))
 
         //tokens.forEach { println(it) }
     }
