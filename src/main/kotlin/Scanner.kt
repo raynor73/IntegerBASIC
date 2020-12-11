@@ -52,7 +52,7 @@ class Scanner(private val source: String) {
                 when {
                     isDigit(c) -> number()
                     isAlpha(c) -> identifier()
-                    else -> error(line, "Unexpected character.")
+                    else -> IntegerBASIC.error(line, "Unexpected character.")
                 }
             }
         }
@@ -80,7 +80,7 @@ class Scanner(private val source: String) {
                     val text = source.substring(start, current)
                     val type = KEYWORDS[text]
                     if (type == null) {
-                        error(line, "Unexpected keyword")
+                        IntegerBASIC.error(line, "Unexpected keyword")
                     } else {
                         addToken(type)
                         if (type == TokenType.REM) {
@@ -113,13 +113,13 @@ class Scanner(private val source: String) {
     private fun  string() {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n') {
-                error(line, "Unexpected new line in string.")
+                IntegerBASIC.error(line, "Unexpected new line in string.")
             }
             advance()
         }
 
         if (isAtEnd()) {
-            error(line, "Unterminated string.")
+            IntegerBASIC.error(line, "Unterminated string.")
         }
 
         advance()
