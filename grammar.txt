@@ -1,11 +1,11 @@
 command                       -> declaration ( ":" declaration )* ;
 
 program                       -> line* EOF ;
-line                          -> LINE_NUMBER declaration ( ":" declaration )* EOL ;
-declaration                   -> variableDeclaration | statement ;
+line                          -> LINE_NUMBER declaration+ EOL ;
+declaration                   -> ( variableDeclaration | statement ) ":"? ;
 statement                     -> printStatement ;
 printStatement                -> "PRINT" expression ;
-variableDeclaration           -> ( letVariableDeclaration | impliedLetVariableDeclaration )
+variableDeclaration           -> letVariableDeclaration | impliedLetVariableDeclaration
 letVariableDeclaration        -> "LET" ( IDENTIFIER | STRING_IDENTIFIER ) "=" ( impliedLetVariableDeclaration | expression ) ;
 impliedLetVariableDeclaration -> ( IDENTIFIER | STRING_IDENTIFIER ) "=" expression ;
 expression                    -> equality ;

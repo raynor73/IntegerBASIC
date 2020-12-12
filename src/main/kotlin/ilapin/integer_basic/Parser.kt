@@ -9,12 +9,35 @@ class Parser(private val tokens: List<Token>) {
 
     private var current = 0
 
-    fun parse(): Expression? {
+    /*fun parse(): Expression? {
         return try {
             expression()
         } catch (e: ParseError) {
             null
         }
+    }*/
+    fun parse(): List<Statement> {
+        val statements = ArrayList<Statement>()
+
+        while (!isAtEnd()) {
+            statements.add(statement())
+        }
+
+        return statements
+    }
+
+    private fun statement(): Statement {
+        return when {
+            match(TokenType.PRINT) -> printStatement()
+            else -> expressionStatement()
+        }
+    }
+
+    private fun printStatement(): Statement {
+        val value = expression()
+        //consume()
+        match(TokenType.EOL, TokenType.COLON)
+        return Statement.Print(value)
     }
 
     private fun expression(): Expression {
