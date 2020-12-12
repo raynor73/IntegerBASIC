@@ -1,3 +1,5 @@
+package ilapin.integer_basic
+
 /**
  * @author igorlapin on 11/12/2020.
  */
@@ -23,6 +25,11 @@ sealed class Expression {
         override fun <R> accept(visitor: Visitor<R>): R = visitor.visitUnaryExpression(this)
     }
 
+    class Variable(val name: Token) : Expression() {
+
+        override fun <R> accept(visitor: Visitor<R>): R = visitor.visitVariableExpression(this)
+    }
+
     abstract fun <R> accept(visitor: Visitor<R>): R
 
     interface Visitor<R> {
@@ -34,5 +41,7 @@ sealed class Expression {
         fun visitLiteralExpression(expression: Literal): R
 
         fun visitUnaryExpression(expression: Unary): R
+
+        fun visitVariableExpression(expression: Variable): R
     }
 }

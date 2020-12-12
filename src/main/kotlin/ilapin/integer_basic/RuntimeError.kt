@@ -1,3 +1,5 @@
+package ilapin.integer_basic
+
 import java.lang.RuntimeException
 
 /**

@@ -1,3 +1,5 @@
+package ilapin.integer_basic
+
 /**
  * @author igorlapin on 10/12/2020.
  */

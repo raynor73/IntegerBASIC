@@ -1,3 +1,5 @@
+package ilapin.integer_basic
+
 /**
  * @author igorlapin on 10/12/2020.
  */
@@ -53,17 +55,17 @@ object IntegerBASIC {
         val scanner = Scanner(source)
         val tokens = scanner.scanTokens()
 
-        /*val parser = Parser(tokens)
+        val parser = Parser(tokens)
         val expression = parser.parse()
         if (hadError || expression == null) {
             return
-        }*/
+        }
 
         //interpreter.interpret(expression)
 
-        //println(AstPrinter().print(expression))
+        println(AstPrinter().print(expression))
 
-        tokens.forEach { println(it) }
+        //tokens.forEach { println(it) }
     }
 
     private fun report(line: Int, where: String, message: String) {

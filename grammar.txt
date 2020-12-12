@@ -1,11 +1,20 @@
-command             -> declaration ( ":" declaration )* ;
+command                       -> declaration ( ":" declaration )* ;
 
-program             -> line* EOF ;
-line                -> LINE_NUMBER declaration ( ":" declaration )* EOL ;
-declaration         -> varDeclaration | statement ;
-statement           -> expressionStatement | printStatement ;
-expressionStatement -> expression ;
-printStatement      -> "PRINT" expression ;
+program                       -> line* EOF ;
+line                          -> LINE_NUMBER declaration ( ":" declaration )* EOL ;
+declaration                   -> variableDeclaration | statement ;
+statement                     -> printStatement ;
+printStatement                -> "PRINT" expression ;
+variableDeclaration           -> ( letVariableDeclaration | impliedLetVariableDeclaration )
+letVariableDeclaration        -> "LET" ( IDENTIFIER | STRING_IDENTIFIER ) "=" ( impliedLetVariableDeclaration | expression ) ;
+impliedLetVariableDeclaration -> ( IDENTIFIER | STRING_IDENTIFIER ) "=" expression ;
+expression                    -> equality ;
+equality                      -> comparison ( ( "<>" | "=" ) comparison )* ;
+comparison                    -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term                          -> factor ( ( "-" | "+" ) factor )* ;
+factor                        -> unary ( ( "/" | "*" ) unary )* ;
+unary                         -> ( "NOT" | "-" ) primary ;
+primary                       -> NUMBER | STRING | "(" expression ")" | IDENTIFIER | STRING_IDENTIFIER ;
 
 
 
@@ -18,16 +27,6 @@ program             -> statement* EOF ;
 statement           -> expressionStatement | printStatement ;
 expressionStatement -> expression ";" ;
 printStatement      -> "PRINT" expression ";" ;
-
-
-
-expression          -> equality ;
-equality            -> comparison ( ( "<>" | "=" ) comparison )* ;
-comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-term                -> factor ( ( "-" | "+" ) factor )* ;
-factor              -> unary ( ( "/" | "*" ) unary )* ;
-unary               -> ( "NOT" | "-" ) primary ;
-primary             -> NUMBER | STRING | "(" expression ")" ;
 
 
 
