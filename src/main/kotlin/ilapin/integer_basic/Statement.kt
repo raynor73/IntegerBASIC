@@ -10,10 +10,10 @@ sealed class Statement {
         override fun <R> accept(visitor: Visitor<R>): R = visitor.visitPrintStatement(this)
     }
 
-    class Expression(val expression: ilapin.integer_basic.Expression) : Statement() {
+    /*class Expression(val expression: ilapin.integer_basic.Expression) : Statement() {
 
         override fun <R> accept(visitor: Visitor<R>): R = visitor.visitExpressionStatement(this)
-    }
+    }*/
 
     class Variable(val name: Token, val initializer: ilapin.integer_basic.Expression) : Statement() {
 
@@ -26,7 +26,7 @@ sealed class Statement {
 
         fun visitPrintStatement(statement: Print): R
 
-        fun visitExpressionStatement(statement: Expression): R
+        //fun visitExpressionStatement(statement: Expression): R
 
         fun visitVariableStatement(statement: Variable): R
     }

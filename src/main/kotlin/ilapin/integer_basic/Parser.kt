@@ -27,17 +27,20 @@ class Parser(private val tokens: List<Token>) {
     }
 
     private fun statement(): Statement {
-        return when {
+        val statement = when {
             match(TokenType.PRINT) -> printStatement()
-            else -> expressionStatement()
+            else -> error("Unhandled error #2")//expressionStatement()
         }
+
+        if (!match(TokenType.EOL, TokenType.COLON)) {
+            error("Unhandled error #1")
+        }
+
+        return statement
     }
 
     private fun printStatement(): Statement {
-        val value = expression()
-        //consume()
-        match(TokenType.EOL, TokenType.COLON)
-        return Statement.Print(value)
+        return Statement.Print(expression())
     }
 
     private fun expression(): Expression {

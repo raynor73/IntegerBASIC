@@ -3,15 +3,27 @@ package ilapin.integer_basic
 /**
  * @author igorlapin on 11/12/2020.
  */
-class Interpreter : Expression.Visitor<Any?> {
+class Interpreter : Expression.Visitor<Any?>, Statement.Visitor<Any?> {
 
-    fun interpret(expression: Expression) {
+    /*fun interpret(expression: Expression) {
         try {
             val value = evaluate(expression)
             println(stringify(value))
         } catch (e: RuntimeError) {
             IntegerBASIC.runtimeError(e)
         }
+    }*/
+
+    fun interpret(statements: List<Statement>) {
+        try {
+            statements.forEach { execute(it) }
+        } catch (e: RuntimeError) {
+            IntegerBASIC.runtimeError(e)
+        }
+    }
+
+    private fun execute(statement: Statement) {
+        statement.accept(this)
     }
 
     private fun stringify(value: Any?): String {
@@ -98,6 +110,18 @@ class Interpreter : Expression.Visitor<Any?> {
         }
     }
 
+    override fun visitVariableExpression(expression: Expression.Variable): Any? {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitPrintStatement(statement: Statement.Print): Any? {
+        println(stringify(evaluate(statement.expression)))
+        return null
+    }
+
+    override fun visitVariableStatement(statement: Statement.Variable): Any? {
+        TODO("Not yet implemented")
+    }
     private fun checkNumberOperand(operator: Token, operand: Any?) {
         if (operand is Int) {
             return

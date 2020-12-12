@@ -60,7 +60,7 @@ class Scanner(private val source: String) {
                     isDigit(c) -> number()
                     isAlpha(c) -> {
                         val c1 = peek()
-                        when  {
+                        when {
                             isDigit(c1) -> {
                                 advance()
                                 addToken(TokenType.IDENTIFIER)

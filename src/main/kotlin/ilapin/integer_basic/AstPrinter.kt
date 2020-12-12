@@ -41,6 +41,10 @@ class AstPrinter : Expression.Visitor<String> {
         return parenthesize(expression.operator.lexeme, expression.right)
     }
 
+    override fun visitVariableExpression(expression: Expression.Variable): String {
+        return expression.name.lexeme
+    }
+
     private fun parenthesize(name: String, vararg expressions: Expression): String {
         val sb = StringBuilder()
 

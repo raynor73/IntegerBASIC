@@ -56,15 +56,14 @@ object IntegerBASIC {
         val tokens = scanner.scanTokens()
 
         val parser = Parser(tokens)
-        val expression = parser.parse()
-        if (hadError || expression == null) {
+        //val expression = parser.parse()
+        val statements = parser.parse()
+        if (hadError) {
             return
         }
+        interpreter.interpret(statements)
 
         //interpreter.interpret(expression)
-
-        println(AstPrinter().print(expression))
-
         //tokens.forEach { println(it) }
     }
 
