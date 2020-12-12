@@ -5,6 +5,7 @@ class Scanner(private val source: String) {
 
     private val tokens = ArrayList<Token>()
 
+    private var isFirstTokenInLine = true
     private var start = 0
     private var current = 0
     private var line = 1
@@ -44,52 +45,49 @@ class Scanner(private val source: String) {
 
             ' ', '\r', '\t' -> {}
 
-            '\n' -> line++
+            '\n' -> {
+                tokens.add(Token(TokenType.EOL, "", null, line))
+                isFirstTokenInLine = true
+                line++
+            }
 
             '"' -> string()
 
             else -> {
                 when {
                     isDigit(c) -> number()
-                    isAlpha(c) -> identifier()
+                    isAlpha(c) -> {
+                        val c1 = peek()
+                        when  {
+                            isDigit(c1) -> {
+                                advance()
+                                addToken(TokenType.IDENTIFIER)
+                            }
+                            isAlpha(c1) -> statementOrBuiltInFunction()
+                            else -> addToken(TokenType.IDENTIFIER)
+                        }
+                    }
                     else -> IntegerBASIC.error(line, "Unexpected character.")
                 }
             }
         }
     }
 
-    private fun identifier() {
-        val c = peek()
-        when {
-            c == '$' -> {
-                advance()
-                addToken(TokenType.STRING_IDENTIFIER)
-            }
-            isDigit(c) -> {
-                advance()
-                addToken(TokenType.IDENTIFIER)
-            }
-            else -> {
-                if (!isAlpha(c)) {
-                    addToken(TokenType.IDENTIFIER)
-                } else {
-                    while (isAlpha(peek())) {
+    private fun statementOrBuiltInFunction() {
+        while (isAlpha(peek())) {
+            advance()
+
+            val text = source.substring(start, current)
+            val type = KEYWORDS[text]
+
+            if (type != null) {
+                addToken(type)
+                if (type == TokenType.REM) {
+                    while (peek() != '\n' && !isAtEnd()) {
                         advance()
                     }
-
-                    val text = source.substring(start, current)
-                    val type = KEYWORDS[text]
-                    if (type == null) {
-                        IntegerBASIC.error(line, "Unexpected keyword")
-                    } else {
-                        addToken(type)
-                        if (type == TokenType.REM) {
-                            while (peek() != '\n' && !isAtEnd()) {
-                                advance()
-                            }
-                        }
-                    }
                 }
+                return
             }
         }
     }
@@ -103,14 +101,17 @@ class Scanner(private val source: String) {
             advance()
         }
 
-        addToken(TokenType.NUMBER, source.substring(start, current).toInt())
+        addToken(
+                if (isFirstTokenInLine) TokenType.LINE_NUMBER else TokenType.NUMBER,
+                source.substring(start, current).toInt()
+        )
     }
 
     private fun isDigit(c: Char): Boolean {
         return c in '0'..'9'
     }
 
-    private fun  string() {
+    private fun string() {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n') {
                 IntegerBASIC.error(line, "Unexpected new line in string.")
@@ -158,6 +159,7 @@ class Scanner(private val source: String) {
     private fun addToken(type: TokenType, literal: Any?) {
         val text = source.substring(start, current)
         tokens.add(Token(type, text, literal, line))
+        isFirstTokenInLine = false
     }
 
     private fun isAtEnd(): Boolean {

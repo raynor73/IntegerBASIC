@@ -20,5 +20,6 @@ enum class TokenType {
     // Built-in functions.
     ABS, SGN, PEEK, RND, LEN,
 
-    EOF
+    // Special markers
+    LINE_NUMBER, EOL, EOF
 }

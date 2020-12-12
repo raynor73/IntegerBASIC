@@ -1,16 +1,39 @@
-expression -> equality ;
-equality   -> comparison ( ( "<>" | "=" ) comparison )* ;
-comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-term       -> factor ( ( "-" | "+" ) factor )* ;
-factor     -> unary ( ( "/" | "*" ) unary )* ;
-unary      -> ( "NOT" | "-" ) primary ;
-primary    -> NUMBER | STRING | "(" expression ")" ;
+command             -> declaration ( ":" declaration )* ;
+
+program             -> line* EOF ;
+line                -> LINE_NUMBER declaration ( ":" declaration )* EOL ;
+declaration         -> varDeclaration | statement ;
+statement           -> expressionStatement | printStatement ;
+expressionStatement -> expression ;
+printStatement      -> "PRINT" expression ;
 
 
 
-expression -> literal | unary | binary | grouping ;
-literal    -> NUMBER | STRING ;
-grouping   -> "(" expression ")" ;
-unary      -> ("-" | "NOT") expression ;
-binary     -> expression operator expression ;
-operator   -> "<>" | "<" | ">" | "<=" | ">=" | "+" | "-" | "*" | "/" | "MOD" | "AND" | "OR"
+program             -> declaration* EOF ;
+declaration         -> varDeclaration | statement ;
+
+
+
+program             -> statement* EOF ;
+statement           -> expressionStatement | printStatement ;
+expressionStatement -> expression ";" ;
+printStatement      -> "PRINT" expression ";" ;
+
+
+
+expression          -> equality ;
+equality            -> comparison ( ( "<>" | "=" ) comparison )* ;
+comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term                -> factor ( ( "-" | "+" ) factor )* ;
+factor              -> unary ( ( "/" | "*" ) unary )* ;
+unary               -> ( "NOT" | "-" ) primary ;
+primary             -> NUMBER | STRING | "(" expression ")" ;
+
+
+
+expression          -> literal | unary | binary | grouping ;
+literal             -> NUMBER | STRING ;
+grouping            -> "(" expression ")" ;
+unary               -> ("-" | "NOT") expression ;
+binary              -> expression operator expression ;
+operator            -> "<>" | "<" | ">" | "<=" | ">=" | "+" | "-" | "*" | "/" | "MOD" | "AND" | "OR"
